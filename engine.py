@@ -4,8 +4,8 @@ import pyglet
 from pyglet.window import key
 from core import GameElement
 
-SCREEN_X = 800
-SCREEN_Y = 700
+SCREEN_X = 900
+SCREEN_Y = 800
 
 game_window = pyglet.window.Window(SCREEN_X, SCREEN_Y)
 
@@ -25,10 +25,12 @@ def setup_images():
             "Block": "Plain Block.png",
             "GrassBlock": "Grass Block.png",
             "StoneBlock": "Stone Block.png",
+            "WaterBlock": "Water Block.png",
             "ShortTree": "Tree Short.png",
             "TallTree": "Tree Tall.png",
             "Rock": "Rock.png",
             "Chest": "Chest Closed.png",
+            "ChestOpen": "Chest Open.png",
             "DoorClosed": "Door Tall Closed.png",
             "DoorOpen": "Door Tall Open.png",
             "BlueGem": "Gem Blue.png",
@@ -68,16 +70,25 @@ class Board(object):
 
 
         # Make a map with a stoneblock border and filled with grass
-        game_map = []
-        inner_width = width-2
-        for i in range(height):
-            if i == 0 or i == height-1:
-                # On the boundaries
-                game_map.append(["Block"] * width)
-            else:
-                row = ["Block"] + (["GrassBlock"] * inner_width) + ["Block"]
-                game_map.append(row)
+        # game_map = []
+        # inner_width = width-2
+        # for i in range(height):
+        #     if i == 0 or i == height-1:
+        #         # On the boundaries
+        #         game_map.append(["Block"] * width)
+        #     else:
+        #         row = ["Block"] + (["GrassBlock"] * inner_width) + ["Block"]
+        #         game_map.append(row)
         
+        # Creating all grass board
+        game_map = []
+        for i in range(height):
+            # On the boundaries
+            if i == 5:
+                game_map.append(["WaterBlock"] * width)
+            else:
+                game_map.append(["GrassBlock"] * width)
+
         self.base_board = game_map
         self.content_layer = []
         row = [ None ] * width
