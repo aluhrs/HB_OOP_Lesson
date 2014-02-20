@@ -45,7 +45,7 @@ def setup_images():
             "Cat": "Character Cat Girl.png",
             "Horns": "Character Horn Girl.png",
             "Girl": "Character Pink Girl.png",
-            "Princess": "Character Princess Girl.png",
+            "Princess": "Character Reynolds.png",
             "SpeechBubble": "SpeechBubble.png",
             "Star": "Star.png",
             "Boat": "Boat.png",

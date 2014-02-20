@@ -48,7 +48,7 @@ class Gem(GameElement):
 
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just acquired a gem! Possessing this gem has given you super strength. Use your new strength to crush a boulder, and defeat the evil enemy and save the boy.")
+        GAME_BOARD.draw_msg("Oh no! Ryan Reynolds is trying to step in for Ryan Gosling's photoshoot! Use the gem's super strength. Use your new strength to crush a boulder, and defeat Ryan Reynolds!")
 
 class Heart(GameElement):
     IMAGE = "Heart"
@@ -89,7 +89,7 @@ class SpecialTallTree(GameElement):
             if type(item) == Chest:
                 player.inventory.append(self)
                 GAME_BOARD.del_el(5,6)
-                GAME_BOARD.draw_msg("You built a boat! Cross the river to continue your mission.")
+                GAME_BOARD.draw_msg("You built a canoe! Hey, remember that canoe scene from the Notebook? Cross the river and find the Blue Gem.")
                 boat = Boat()
                 GAME_BOARD.register(boat)
                 GAME_BOARD.set_el(6, 5, boat)
@@ -105,7 +105,7 @@ class UglyTree(GameElement):
                 GAME_BOARD.del_el(0, 6)
                 keys = Key()
                 GAME_BOARD.register(keys)
-                GAME_BOARD.set_el(1, 6, keys)
+                GAME_BOARD.set_el(5, 7, keys)
 
 class Boat(GameElement):
     IMAGE = "Boat"
@@ -133,7 +133,7 @@ class Key(GameElement):
 
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just acquired a key! You have %d items!" % (len(player.inventory)))
+        GAME_BOARD.draw_msg("You just acquired a key! Now go use it to unlock the chest!")
 
 class Stone(GameElement):
     IMAGE = "StoneBlock"
@@ -165,7 +165,7 @@ class Girl(GameElement):
     SOLID = True
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("Help! There's a boy locked in the tower across the river! Search for a key to unlock the chest.")
+        GAME_BOARD.draw_msg("To help Ryan, search for a key to unlock the chest.")
         speech_bubble = SpeechBubble()
         GAME_BOARD.register(speech_bubble)
         GAME_BOARD.set_el(3, 7, speech_bubble)
@@ -180,7 +180,7 @@ class Ava(GameElement):
     SOLID = False
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("")
+        GAME_BOARD.draw_msg("You have defeated me! Now you can go save Ryan from the tower I locked him in.")
         player.inventory.append(self)
 
 
@@ -213,7 +213,7 @@ def initialize():
     GAME_BOARD.set_el(0, 9, PLAYER)
     print PLAYER
 
-    GAME_BOARD.draw_msg("Jona and Ashley's Excellent Adventure")
+    GAME_BOARD.draw_msg("Help Ryan Gosling! He's trapped and can't get to his Sexiest Man Alive photoshoot!")
 
     # GEM
     gem = Gem()
