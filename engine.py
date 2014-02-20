@@ -26,6 +26,7 @@ def setup_images():
             "GrassBlock": "Grass Block.png",
             "StoneBlock": "Stone Block.png",
             "WaterBlock": "Water Block.png",
+            "WaterBlockTall": "Water Block Tall.png",
             "ShortTree": "Tree Short.png",
             "TallTree": "Tree Tall.png",
             "SpecialTallTree": "Tree Tall.png",
@@ -40,13 +41,14 @@ def setup_images():
             "OrangeGem": "Gem Orange.png",
             "Heart": "Heart.png",
             "Key": "Key.png",
-            "Boy": "Character Boy.png",
+            "Boy": "Character Ryan.png",
             "Cat": "Character Cat Girl.png",
             "Horns": "Character Horn Girl.png",
             "Girl": "Character Pink Girl.png",
             "Princess": "Character Princess Girl.png",
             "SpeechBubble": "SpeechBubble.png",
-            "Star": "Star.png"
+            "Star": "Star.png",
+            "Boat": "Boat.png",
             }
 
     for k,v in filenames.items():
@@ -89,7 +91,7 @@ class Board(object):
         for i in range(height):
             # On the boundaries
             if i == 5:
-                game_map.append(["WaterBlock"] * width)
+                game_map.append(["WaterBlockTall"] * width)
             else:
                 game_map.append(["GrassBlock"] * width)
 
@@ -239,13 +241,13 @@ def run():
         handler = game.keyboard_handler
         def handler_wrapper(dt):
             handler()
-        pyglet.clock.schedule_interval(handler_wrapper, 1/10.0)
+        pyglet.clock.schedule_interval(handler_wrapper, 1/15.0)
     except AttributeError:
         print "No keyboard handler"
         pass
         
     # Set up the update clock
-    pyglet.clock.schedule_interval(update, 1/10.)
+    pyglet.clock.schedule_interval(update, 1/15.)
     game.initialize()
     pyglet.app.run()
 
