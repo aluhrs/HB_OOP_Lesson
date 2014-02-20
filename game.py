@@ -61,6 +61,7 @@ class Chest(GameElement):
     def interact(self, player): 
         for item in player.inventory:
             if type(item) == Key:
+                player.inventory.append(self)
                 GAME_BOARD.draw_msg('There\'s a message in the chest! "Use wood from a tree to cross the river."')
                 GAME_BOARD.del_el(8, 8)
                 openchest = ChestOpen()
@@ -81,25 +82,30 @@ class TallTree(GameElement):
 
 class SpecialTallTree(GameElement):
     IMAGE = "SpecialTallTree"
-    SOLID = False
+    SOLID = True
 
     def interact(self, player):
-        player.inventory.append(self)
-        GAME_BOARD.draw_msg("You built a boat! Cross the river to continue your mission.")
-        boat = Boat()
-        GAME_BOARD.register(boat)
-        GAME_BOARD.set_el(6, 5, boat)
+        for item in player.inventory:
+            if type(item) == Chest:
+                player.inventory.append(self)
+                GAME_BOARD.del_el(5,6)
+                GAME_BOARD.draw_msg("You built a boat! Cross the river to continue your mission.")
+                boat = Boat()
+                GAME_BOARD.register(boat)
+                GAME_BOARD.set_el(6, 5, boat)
 
 class UglyTree(GameElement):
     IMAGE = "UglyTree"
-    SOLID = False
+    SOLID = True
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("You have found the key!")
-        GAME_BOARD.del_el(0, 6)
-        keys = Key()
-        GAME_BOARD.register(keys)
-        GAME_BOARD.set_el(1, 6, keys)
+        for item in player.inventory:
+            if type(item) == Girl:
+                GAME_BOARD.draw_msg("You have found the key!")
+                GAME_BOARD.del_el(0, 6)
+                keys = Key()
+                GAME_BOARD.register(keys)
+                GAME_BOARD.set_el(1, 6, keys)
 
 class Boat(GameElement):
     IMAGE = "Star"
@@ -163,6 +169,7 @@ class Girl(GameElement):
         speech_bubble = SpeechBubble()
         GAME_BOARD.register(speech_bubble)
         GAME_BOARD.set_el(3, 7, speech_bubble)
+        player.inventory.append(self)
 
 class SpeechBubble(GameElement):
     IMAGE = "SpeechBubble"
