@@ -11,13 +11,18 @@ KEYBOARD = None
 PLAYER = None
 ######################
 
-GAME_WIDTH = 8
-GAME_HEIGHT = 8
+GAME_WIDTH = 10
+GAME_HEIGHT = 10
 
 #### Put class definitions here ####
 class Rock(GameElement):
     IMAGE = "Rock"
     SOLID = True
+
+    def interact(self, player):
+        for item in player.inventory:
+            if type(item) == Gem and (self.x == 2 and self.y == 3):
+                GAME_BOARD.del_el(2, 3)
 
 class Character(GameElement):
     IMAGE = "Horns"
@@ -43,27 +48,24 @@ class Gem(GameElement):
 
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just acquired a gem! You have %d items!"%(len(player.inventory)))
+        GAME_BOARD.draw_msg("You just acquired a gem! Possessing this gem has given you super strength. Use your new strength to crush a boulder, and defeat the evil enemy and save the boy.")
 
 class Heart(GameElement):
     IMAGE = "Heart"
-    SOLID = False
-
-    def interact(self, player):
-        player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just acquired a heart! You have %d items!"%(len(player.inventory)))
+    SOLID = True
 
 class Chest(GameElement):
     IMAGE = "Chest"
     SOLID = True
 
-    def interact(self, player):
+    def interact(self, player): 
         for item in player.inventory:
             if type(item) == Key:
-                GAME_BOARD.draw_msg("You have unlocked the chest!")
-                # self.IMAGE = "ChestOpen"
-                
-# open_chest = Chest("OpenChest", True)
+                GAME_BOARD.draw_msg('There\'s a message in the chest! "Use wood from a tree to cross the river."')
+                GAME_BOARD.del_el(8, 8)
+                openchest = ChestOpen()
+                GAME_BOARD.register(openchest)
+                GAME_BOARD.set_el(8, 8, openchest)
 
 class ChestOpen(GameElement):
     IMAGE = "ChestOpen"
@@ -77,6 +79,48 @@ class TallTree(GameElement):
     IMAGE = "TallTree"
     SOLID = True
 
+class SpecialTallTree(GameElement):
+    IMAGE = "SpecialTallTree"
+    SOLID = False
+
+    def interact(self, player):
+        player.inventory.append(self)
+        GAME_BOARD.draw_msg("You built a boat! Cross the river to continue your mission.")
+        boat = Boat()
+        GAME_BOARD.register(boat)
+        GAME_BOARD.set_el(6, 5, boat)
+
+class UglyTree(GameElement):
+    IMAGE = "UglyTree"
+    SOLID = False
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg("You have found the key!")
+        GAME_BOARD.del_el(0, 6)
+        keys = Key()
+        GAME_BOARD.register(keys)
+        GAME_BOARD.set_el(1, 6, keys)
+
+class Boat(GameElement):
+    IMAGE = "Star"
+    SOLID = False
+
+class Water(GameElement):
+    IMAGE = "WaterBlock"
+    SOLID = True
+
+    def interact(self, player):
+        for item in player.inventory:
+            if type(item) == SpecialTallTree and (self.x == 6 and self.y == 5):
+                self.SOLID = False
+
+# class SpecialWaterBlock(GameElement):
+#     IMAGE = "WaterBlock"
+#     def interact(self, player):
+#         for item in player.inventory:
+#             if type(item) == SpecialTallTree:
+#                 self.SOLID = False
+
 class Key(GameElement):
     IMAGE = "Key"
     SOLID = False
@@ -85,10 +129,59 @@ class Key(GameElement):
         player.inventory.append(self)
         GAME_BOARD.draw_msg("You just acquired a key! You have %d items!" % (len(player.inventory)))
 
+class Stone(GameElement):
+    IMAGE = "StoneBlock"
+    SOLID = True
+
+    def interact(self, player):
+        for item in player.inventory:
+            if type(item) == Ava and (self.x == 7 and self.y == 0):
+                GAME_BOARD.del_el(7, 0)
+                player.inventory.append(self)
+        
+        for item in player.inventory:
+            if type(item) == Stone and (self.x == 8 and self.y == 0):
+                GAME_BOARD.del_el(8, 0)
+
+class Boy(GameElement):
+    IMAGE = "Boy"
+    SOLID = True
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg("Hey girl, fork my heart because I'm ready to commit.")
+        GAME_BOARD.del_el(8, 1)
+        heart = Heart()
+        GAME_BOARD.register(heart)
+        GAME_BOARD.set_el(8, 1, heart)
+
+class Girl(GameElement):
+    IMAGE = "Girl"
+    SOLID = True
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg("Help! There's a boy locked in the tower across the river! Search for a key to unlock the chest.")
+        speech_bubble = SpeechBubble()
+        GAME_BOARD.register(speech_bubble)
+        GAME_BOARD.set_el(3, 7, speech_bubble)
+
+class SpeechBubble(GameElement):
+    IMAGE = "SpeechBubble"
+    SOLID = False
+
+class Ava(GameElement):
+    IMAGE = "Princess"
+    SOLID = False
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg("")
+        player.inventory.append(self)
+
+
 ####   End class definitions    ####
 
 def initialize():
     """Put game initialization code here"""
+    # ROCKS
     rock_positions = [
             (2, 1),
             (1, 2),
@@ -103,42 +196,38 @@ def initialize():
         GAME_BOARD.set_el(pos[0], pos[1], rock)
         rocks.append(rock)
 
-    rocks[-1].SOLID = False
-
     for rock in rocks:
         print rock
 
+    # PLAYER
     global PLAYER
     PLAYER = Character()
     GAME_BOARD.register(PLAYER)
-    GAME_BOARD.set_el(2, 2, PLAYER)
+    GAME_BOARD.set_el(0, 9, PLAYER)
     print PLAYER
 
     GAME_BOARD.draw_msg("Jona and Ashley's Excellent Adventure")
 
+    # GEM
     gem = Gem()
     GAME_BOARD.register(gem)
-    GAME_BOARD.set_el(3, 1, gem)
+    GAME_BOARD.set_el(0, 1, gem)
 
-    heart = Heart()
-    GAME_BOARD.register(heart)
-    GAME_BOARD.set_el(6, 6, heart)
-
-    openchest = ChestOpen()
-    GAME_BOARD.register(openchest)
-    GAME_BOARD.set_el(5, 6, openchest)
-
+    # CHEST
     chest = Chest()
     GAME_BOARD.register(chest)
-    GAME_BOARD.set_el(5, 6, chest)
+    GAME_BOARD.set_el(8, 8, chest)
 
-    keys = Key()
-    GAME_BOARD.register(keys)
-    GAME_BOARD.set_el(7,7, keys)
-
+    # SHORT TREES
     short_tree_positions = [
-            (1, 7),
-            (6, 2)
+            (9, 8),
+            (9, 9),
+            (9, 7),
+            (8, 7),
+            (7, 7),
+            (7, 8),
+            (7, 9),
+            (8, 9)
         ]
 
     short_trees = []
@@ -152,9 +241,107 @@ def initialize():
     for short_tree in short_trees:
         print short_tree
 
-    tall_tree = TallTree()
-    GAME_BOARD.register(tall_tree)
-    GAME_BOARD.set_el(3,5, tall_tree)
+    short_trees[-1].SOLID = False
+    short_trees[-2].SOLID = False
+    
+
+    # TALL TREES
+    tall_tree_positions = [
+            (3, 6),
+            (4, 6),
+            (1, 8),
+            (4, 8),
+            (3, 9),
+        ]
+
+    tall_trees = []
+
+    for pos in tall_tree_positions:
+        tall_tree = TallTree()
+        GAME_BOARD.register(tall_tree)
+        GAME_BOARD.set_el(pos[0], pos[1], tall_tree)
+        tall_trees.append(tall_tree)
+
+    # SPECIAL TALL TREE
+    special_tall_tree = SpecialTallTree()
+    GAME_BOARD.register(special_tall_tree)
+    GAME_BOARD.set_el(5, 6, special_tall_tree)
+
+    # UGLY TREE
+    ugly_tree = UglyTree()
+    GAME_BOARD.register(ugly_tree)
+    GAME_BOARD.set_el(0, 6, ugly_tree)
+
+    # STONE BLOCKS
+    stone_positions = [
+            (9, 0),
+            (7, 1),
+            (7, 2),
+            (9, 1),
+            (9, 2),
+            (8, 2),
+            (7, 0),
+            (8, 0),
+        ]
+
+    stones = []
+
+    for pos in stone_positions:
+        stone_wall = Stone()
+        GAME_BOARD.register(stone_wall)
+        GAME_BOARD.set_el(pos[0], pos[1], stone_wall)
+        stones.append(stone_wall)
+
+    for stone_wall in stones:
+        print stone_wall
+
+
+    # WATER BLOCKS
+    water_positions = [
+            (0, 5),
+            (1, 5),
+            (2, 5),
+            (3, 5),
+            (4, 5),
+            (5, 5),
+            (6, 5),
+            (7, 5),
+            (8, 5),
+            (9, 5)
+        ]
+
+    water_blocks = []
+
+    for pos in water_positions:
+        water = Water()
+        GAME_BOARD.register(water)
+        GAME_BOARD.set_el(pos[0], pos[1], water)
+        water_blocks.append(water)
+
+    for water in water_blocks:
+        print water
+
+    # SPECIAL WATER BLOCK
+    # special_water_block = SpecialWaterBlock()
+    # GAME_BOARD.register(special_water_block)
+    # GAME_BOARD.set_el(5, 5, special_water_block)
+
+    # BOY
+    boy = Boy()
+    GAME_BOARD.register(boy)
+    GAME_BOARD.set_el(8, 1, boy)
+
+    # HELPER GIRL
+    girl = Girl()
+    GAME_BOARD.register(girl)
+    GAME_BOARD.set_el(2, 8, girl)
+
+    # Ava Enemy
+    ava = Ava()
+    GAME_BOARD.register(ava)
+    GAME_BOARD.set_el(2, 2, ava)
+
+
 
 def keyboard_handler():
     direction = None
