@@ -108,7 +108,7 @@ class UglyTree(GameElement):
                 GAME_BOARD.set_el(1, 6, keys)
 
 class Boat(GameElement):
-    IMAGE = "Star"
+    IMAGE = "Boat"
     SOLID = False
 
 class Water(GameElement):
@@ -328,11 +328,6 @@ def initialize():
     for water in water_blocks:
         print water
 
-    # SPECIAL WATER BLOCK
-    # special_water_block = SpecialWaterBlock()
-    # GAME_BOARD.register(special_water_block)
-    # GAME_BOARD.set_el(5, 5, special_water_block)
-
     # BOY
     boy = Boy()
     GAME_BOARD.register(boy)
@@ -347,7 +342,6 @@ def initialize():
     ava = Ava()
     GAME_BOARD.register(ava)
     GAME_BOARD.set_el(2, 2, ava)
-
 
 
 def keyboard_handler():
