@@ -48,7 +48,7 @@ class Gem(GameElement):
 
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("Oh no! Ryan Reynolds is trying to step in for Ryan Gosling's photoshoot! Use the gem's super strength. Use your new strength to crush a boulder, and defeat Ryan Reynolds!")
+        GAME_BOARD.draw_msg("Oh no! Ryan Reynolds is trying to take over Ryan Gosling's photoshoot! Use the super strength from the gem to crush a boulder, and defeat Ryan Reynolds!")
 
 class Heart(GameElement):
     IMAGE = "Heart"
@@ -89,7 +89,7 @@ class SpecialTallTree(GameElement):
             if type(item) == Chest:
                 player.inventory.append(self)
                 GAME_BOARD.del_el(5,6)
-                GAME_BOARD.draw_msg("You built a canoe! Hey, remember that canoe scene from the Notebook? Cross the river and find the Blue Gem.")
+                GAME_BOARD.draw_msg("You built a canoe! Hey, remember that canoe scene from the Notebook?")
                 boat = Boat()
                 GAME_BOARD.register(boat)
                 GAME_BOARD.set_el(6, 5, boat)
@@ -101,15 +101,18 @@ class UglyTree(GameElement):
     def interact(self, player):
         for item in player.inventory:
             if type(item) == Girl:
-                GAME_BOARD.draw_msg("You have found the key!")
+                GAME_BOARD.draw_msg("You have found the key! Go pick it up!")
                 GAME_BOARD.del_el(0, 6)
                 keys = Key()
                 GAME_BOARD.register(keys)
-                GAME_BOARD.set_el(5, 7, keys)
+                GAME_BOARD.set_el(2, 6, keys)
 
 class Boat(GameElement):
     IMAGE = "Boat"
     SOLID = False
+
+    def interact(self, player):
+        GAME_BOARD.draw_msg("Go find the Blue Gem!")
 
 class Water(GameElement):
     IMAGE = "WaterBlock"
@@ -133,7 +136,7 @@ class Key(GameElement):
 
     def interact(self, player):
         player.inventory.append(self)
-        GAME_BOARD.draw_msg("You just acquired a key! Now go use it to unlock the chest!")
+        GAME_BOARD.draw_msg("You just acquired a key! Now use it to unlock the chest!")
 
 class Stone(GameElement):
     IMAGE = "StoneBlock"
@@ -154,7 +157,7 @@ class Boy(GameElement):
     SOLID = True
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("Hey girl, fork my heart because I'm ready to commit.")
+        GAME_BOARD.draw_msg('Programmer Ryan: "Hey girl, fork my heart because I\'m ready to commit."')
         GAME_BOARD.del_el(8, 1)
         heart = Heart()
         GAME_BOARD.register(heart)
@@ -165,7 +168,7 @@ class Girl(GameElement):
     SOLID = True
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("To help Ryan, search for a key to unlock the chest.")
+        GAME_BOARD.draw_msg('"To help Ryan, search for a key to unlock the chest."')
         speech_bubble = SpeechBubble()
         GAME_BOARD.register(speech_bubble)
         GAME_BOARD.set_el(3, 7, speech_bubble)
@@ -177,12 +180,19 @@ class SpeechBubble(GameElement):
 
 class Ava(GameElement):
     IMAGE = "Princess"
-    SOLID = False
+    SOLID = True
 
     def interact(self, player):
-        GAME_BOARD.draw_msg("You have defeated me! Now you can go save Ryan from the tower I locked him in.")
+        GAME_BOARD.draw_msg('"You have defeated me! Now you can go save Ryan from the tower I locked him in."')
         player.inventory.append(self)
+        GAME_BOARD.del_el(2, 2)
+        bug = Bug()
+        GAME_BOARD.register(bug)
+        GAME_BOARD.set_el(2, 2, bug)
 
+class Bug(GameElement):
+    IMAGE = "Bug"
+    SOLID = True
 
 ####   End class definitions    ####
 
